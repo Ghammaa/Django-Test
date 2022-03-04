@@ -1,0 +1,98 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<style>
+    .room-container{
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+    }
+    
+    .roomimg{
+        width: 200px;
+        -webkit-transition: width 0.2s linear 0s;
+        transition: width 0.2s linear 0s;
+    }
+
+    /* .roomimg:hover{
+        width: 1500px;
+    } */
+
+    .lightbox{
+        display: none;
+        position: fixed;
+        z-index: 999;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        top: 0;
+        left: 0;
+        background: rgba(0,0,0,.8);
+    }
+
+    .lightbox img{
+        max-width: 90%;
+        max-width: 80%;
+        margin-top: 2%;
+    }
+
+    .lightbox:target{
+        outline: none;
+        display: block;
+    }
+</style>
+
+<div class="room-container">
+    <div>    
+        <h1>{{room.name}}</h1>
+        <div>
+            {% if room.thumb %}
+            <a href="#img1">
+                <img class="roomimg" src="{{ room.thumb.url }}">
+            </a>
+            <a href="#_" class="lightbox" id="img1">
+                <img src="{{ room.thumb.url }}">
+            </a>
+            {% endif %}
+        </div>
+        <p>{{room.description}}</p>
+
+        <div class="comment-wrapper">
+            <h3>Conversation</h3>
+            <hr>
+
+            {% for message in room_messages %}
+                <div>
+                    {% if request.user == message.user %}
+                    <a class="btn btn-outline-danger" href="{% url 'delete-message' message.id %}">Delete</a>
+                    {% endif %}
+                    <small>@{{message.user}}  {{message.created|timesince}} ago</small>
+                    <p>{{message.body}}</p>
+                    <hr>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if request.user.is_authenticated %}
+        <div class="comment-form">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <input type="text" name="body" placeholder="Write your message here"/>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <h3>Participants</h3>
+        <hr>
+
+        {% for user in participants %}
+            <div>
+                <p>@{{ user.username }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock content %}

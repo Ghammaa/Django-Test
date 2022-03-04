@@ -1,0 +1,43 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h1>Profile</h1>
+
+<table class="table">
+    <tbody>
+      <tr>
+        <td>
+            <div id="viewprofile" class="container" >
+                <div>
+                  {% if student.profpic %}
+                  <img src="{{ student.profpic.url }}" width="250">
+                  {% endif %}
+                </div>
+                <a type="button" href="{% url 'editprofile' %}" class="btn btn-outline-success">Edit Profile</a>
+            </div>
+        </td>
+        <td>
+            <div id="idlist" class="container col-5">
+                <ul class="list-group">
+                  <li class="list-group-item">Name</li>
+                  <li class="list-group-item">Age</li>
+                  <li class="list-group-item">Specialty</li>
+                </ul>
+              </div>
+        </td>
+        <td>
+            <div id="idisi" class="container col-5">
+                <ul class="list-group">
+                  <li class="list-group-item">{{student.name}}</li>
+                  <li class="list-group-item">{{student.age}}</li>
+                  <li class="list-group-item">{{student.speciality}}</li>
+                </ul>
+              </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+
+{% endblock content %}
